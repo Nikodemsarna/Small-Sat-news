@@ -16,8 +16,12 @@ logger = logging.getLogger(__name__)
 SMALLSAT_KEYWORDS: tuple[str, ...] = (
     "small satellite",
     "small satellites",
+    "small-satellite",
+    "small-satellites",
     "small sat",
     "small sats",
+    "small-sat",
+    "small-sats",
     "smallsat",
     "smallsats",
     "cubesat",

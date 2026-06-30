@@ -57,7 +57,7 @@ class Settings:
     smtp_password: str = ""
 
     # Behavior
-    window_hours: int = 30
+    window_hours: int = 48
     max_articles: int = 25
     skip_if_empty: bool = True
 
@@ -106,7 +106,7 @@ class Settings:
             smtp_port=_env_int("SMTP_PORT", 587),
             smtp_user=smtp_user,
             smtp_password=os.environ.get("SMTP_PASSWORD", "").strip(),
-            window_hours=_env_int("SMALLSAT_WINDOW_HOURS", 30),
+            window_hours=_env_int("SMALLSAT_WINDOW_HOURS", 48),
             max_articles=_env_int("SMALLSAT_MAX_ARTICLES", 25),
             skip_if_empty=_env_bool("SMALLSAT_SKIP_IF_EMPTY", True),
         )

@@ -58,6 +58,13 @@ def _send_via_resend(subject: str, html: str, text: str, settings: Settings) -> 
 
 
 def _send_via_smtp(subject: str, html: str, text: str, settings: Settings) -> None:
+    if not settings.smtp_user or not settings.smtp_password:
+        raise DeliveryError(
+            "SMTP delivery requires both SMTP_USER and SMTP_PASSWORD. "
+            "Set SMTP_USER to your full email address (e.g. you@gmail.com) and "
+            "SMTP_PASSWORD to a Gmail App Password (16 chars, no spaces)."
+        )
+
     message = MIMEMultipart("alternative")
     message["Subject"] = subject
     message["From"] = settings.sender
@@ -70,8 +77,7 @@ def _send_via_smtp(subject: str, html: str, text: str, settings: Settings) -> No
             server.ehlo()
             server.starttls()
             server.ehlo()
-            if settings.smtp_user:
-                server.login(settings.smtp_user, settings.smtp_password)
+            server.login(settings.smtp_user, settings.smtp_password)
             server.sendmail(settings.sender, [settings.recipient], message.as_string())
     except (smtplib.SMTPException, OSError) as exc:
         raise DeliveryError(f"SMTP delivery failed: {exc}") from exc
