@@ -1,0 +1,19 @@
+{#- A single story card. Expects `item` (a RenderedItem) in context. -#}
+{% set rel_color = {'high': '#1f9d55', 'medium': '#b7791f', 'low': '#8a91a3'} %}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eceef3; border-radius:8px;">
+  <tr>
+    <td style="padding:14px 16px;">
+      <a href="{{ item.link }}" style="font-size:17px; font-weight:600; color:#13294b; text-decoration:none; line-height:1.35;">{{ item.title }}</a>
+      <div style="margin-top:6px; font-size:12px; color:#8a91a3;">
+        <span style="font-weight:600; color:#5b6478;">{{ item.source }}</span>{% if item.published_label %} · {{ item.published_label }}{% endif %}
+        {% if item.relevance == 'high' %}<span style="color:{{ rel_color['high'] }}; font-weight:600;"> · high relevance</span>{% endif %}
+      </div>
+      {% if item.summary %}
+      <p style="margin:10px 0 0 0; font-size:14px; line-height:1.6; color:#33384d;">{{ item.summary }}</p>
+      {% endif %}
+      <div style="margin-top:10px;">
+        <a href="{{ item.link }}" style="font-size:13px; color:#1f6feb; text-decoration:none; font-weight:600;">Read at {{ item.source }} →</a>
+      </div>
+    </td>
+  </tr>
+</table>

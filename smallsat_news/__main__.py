@@ -1,0 +1,64 @@
+"""Command-line entry point: `python -m smallsat_news`."""
+
+from __future__ import annotations
+
+import argparse
+import logging
+import sys
+from pathlib import Path
+
+from .config import Settings
+from .newsletter import run
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="smallsat_news",
+        description="Build and email the daily small-satellite newsletter.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Render the edition but do not send it.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=None,
+        help="Write the rendered HTML to this path (useful with --dry-run).",
+    )
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        help="Logging level (DEBUG, INFO, WARNING, ...). Default: INFO.",
+    )
+    args = parser.parse_args(argv)
+
+    logging.basicConfig(
+        level=getattr(logging, args.log_level.upper(), logging.INFO),
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
+
+    settings = Settings.from_env()
+
+    if not args.dry_run and settings.delivery_provider == "none":
+        logging.error(
+            "No delivery provider configured. Set RESEND_API_KEY or SMTP_* "
+            "variables, or use --dry-run."
+        )
+        return 2
+
+    result = run(settings, dry_run=args.dry_run, output_path=args.output)
+
+    if result.skipped_reason == "no_articles":
+        print("No small-satellite stories today — nothing sent.")
+        return 0
+    if result.sent:
+        print(f"Sent edition with {result.article_count} stories to {settings.recipient}.")
+    else:
+        print(f"Built edition with {result.article_count} stories (not sent).")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

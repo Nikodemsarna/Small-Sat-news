@@ -1,0 +1,46 @@
+# Small-Sat News — source portals
+#
+# Every available portal covering the space sector / space business and
+# satellites that publishes an RSS/Atom feed. Feeds that fail to load on a
+# given day are logged and skipped, so the newsletter degrades gracefully.
+#
+# Add or remove sources freely — `name` is shown as the story's source label.
+
+feeds:
+  # --- Dedicated space-industry / space-business press ---
+  - name: SpaceNews
+    url: https://spacenews.com/feed/
+  - name: Payload
+    url: https://payloadspace.com/feed/
+  - name: Via Satellite
+    url: https://www.satellitetoday.com/feed/
+  - name: SatNews
+    url: https://news.satnews.com/rss/all-news.xml
+  - name: European Spaceflight
+    url: https://europeanspaceflight.com/feed/
+  - name: NASASpaceflight
+    url: https://www.nasaspaceflight.com/feed/
+  - name: Spaceflight Now
+    url: https://spaceflightnow.com/feed/
+  - name: SpaceDaily
+    url: https://www.spacedaily.com/spacedaily.xml
+  - name: The Space Review
+    url: http://www.thespacereview.com/rss.xml
+  - name: SpacePolicyOnline
+    url: https://spacepolicyonline.com/feed/
+
+  # --- General science/tech outlets with strong space desks ---
+  - name: Space.com
+    url: https://www.space.com/feeds/all
+  - name: Ars Technica — Space
+    url: https://feeds.arstechnica.com/arstechnica/space
+  - name: Teslarati — Space
+    url: https://www.teslarati.com/category/news/space/feed/
+
+  # --- Agencies / institutional ---
+  - name: NASA
+    url: https://www.nasa.gov/feed/
+  - name: ESA — Space News
+    url: https://www.esa.int/rssfeed/Our_Activities/Space_Transportation
+  - name: ESA — Applications
+    url: https://www.esa.int/rssfeed/Our_Activities/Observing_the_Earth

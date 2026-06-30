@@ -1,0 +1,80 @@
+{#- Small-Sat News email template. Inline styles for broad email-client support. -#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small-Sat News — {{ date_label }}</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0b1020; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#1a1a2e;">
+  <div style="display:none; max-height:0; overflow:hidden;">
+    {{ count }} small-satellite {{ 'story' if count == 1 else 'stories' }} from across the space-sector press.
+  </div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0b1020; padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="640" cellpadding="0" cellspacing="0" style="max-width:640px; width:100%; background-color:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 24px rgba(0,0,0,0.25);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#13294b 0%,#1f6feb 100%); padding:28px 32px;">
+              <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#9fc3ff; font-weight:600;">Daily Small-Satellite Digest</div>
+              <div style="font-size:26px; font-weight:700; color:#ffffff; margin-top:4px;">🛰️ Small-Sat News</div>
+              <div style="font-size:14px; color:#c9deff; margin-top:6px;">{{ date_label }}</div>
+            </td>
+          </tr>
+
+          {% if intro %}
+          <tr>
+            <td style="padding:24px 32px 8px 32px;">
+              <p style="margin:0; font-size:16px; line-height:1.6; color:#33384d;">{{ intro }}</p>
+            </td>
+          </tr>
+          {% endif %}
+
+          {% if top_picks %}
+          <tr>
+            <td style="padding:20px 32px 4px 32px;">
+              <div style="font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#1f6feb; font-weight:700; border-bottom:2px solid #e6eefc; padding-bottom:8px;">⭐ Top Picks</div>
+            </td>
+          </tr>
+          {% for item in top_picks %}
+          <tr>
+            <td style="padding:16px 32px 0 32px;">
+              {% include 'item.html.j2' %}
+            </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+
+          {% if more %}
+          <tr>
+            <td style="padding:28px 32px 4px 32px;">
+              <div style="font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#5b6478; font-weight:700; border-bottom:2px solid #eceef3; padding-bottom:8px;">More Headlines</div>
+            </td>
+          </tr>
+          {% for item in more %}
+          <tr>
+            <td style="padding:16px 32px 0 32px;">
+              {% include 'item.html.j2' %}
+            </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:32px; text-align:center; color:#8a91a3; font-size:12px; line-height:1.6;">
+              <div style="border-top:1px solid #eceef3; padding-top:20px;">
+                Aggregated from across the space-sector press · filtered for small-satellite development<br>
+                Summaries generated with Claude. Curated automatically — links go to original sources.
+              </div>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

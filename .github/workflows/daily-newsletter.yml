@@ -1,0 +1,73 @@
+name: Daily Small-Sat Newsletter
+
+# Runs every morning and emails the small-satellite digest.
+# Also runnable on demand (workflow_dispatch), with an optional dry run.
+on:
+  schedule:
+    # 07:30 UTC daily. Adjust to taste (cron is in UTC).
+    - cron: "30 7 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Render only, do not send"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-newsletter
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Build and send newsletter
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Delivery — set EITHER the Resend secret OR the SMTP_* secrets.
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          # Optional overrides (otherwise defaults from the code apply).
+          NEWSLETTER_TO: ${{ secrets.NEWSLETTER_TO }}
+          NEWSLETTER_FROM: ${{ secrets.NEWSLETTER_FROM }}
+          SMALLSAT_MODEL: ${{ vars.SMALLSAT_MODEL }}
+          SMALLSAT_EFFORT: ${{ vars.SMALLSAT_EFFORT }}
+          SMALLSAT_WINDOW_HOURS: ${{ vars.SMALLSAT_WINDOW_HOURS }}
+          SMALLSAT_MAX_ARTICLES: ${{ vars.SMALLSAT_MAX_ARTICLES }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python -m smallsat_news --dry-run --output output/edition.html
+          else
+            python -m smallsat_news --output output/edition.html
+          fi
+
+      - name: Upload rendered edition
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newsletter-edition
+          path: output/edition.html
+          if-no-files-found: ignore
+          retention-days: 14
