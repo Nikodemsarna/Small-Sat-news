@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .config import Settings
-from .fetch import fetch_all
+from .fetch import Article, fetch_all
 from .filter import filter_articles
 from .mailer import send_email
 from .render import RenderedEdition, render_edition
@@ -26,8 +26,43 @@ class RunResult:
     edition: RenderedEdition | None
 
 
-def build_edition(settings: Settings, now: datetime | None = None) -> tuple[int, RenderedEdition | None]:
-    """Run the pipeline up to (but not including) delivery."""
+def _sample_articles(now: datetime) -> list[Article]:
+    """Placeholder stories so a test edition always has content to send."""
+    return [
+        Article(
+            title="Test edition — your Small-Sat News delivery is working",
+            link="https://github.com/Nikodemsarna/Small-Sat-news",
+            source="Small-Sat News (sample)",
+            summary=(
+                "This is a sample story. If you're reading it in your inbox, "
+                "email delivery is configured correctly. Real editions replace "
+                "this with live small-satellite news."
+            ),
+            published=now,
+        ),
+        Article(
+            title="Sample: 6U cubesat demonstrates electric propulsion in orbit",
+            link="https://github.com/Nikodemsarna/Small-Sat-news",
+            source="Small-Sat News (sample)",
+            summary=(
+                "A second sample item so you can preview the layout, top-picks "
+                "section, and formatting of a normal edition."
+            ),
+            published=now - timedelta(hours=3),
+        ),
+    ]
+
+
+def build_edition(
+    settings: Settings,
+    now: datetime | None = None,
+    sample_if_empty: bool = False,
+) -> tuple[int, RenderedEdition | None]:
+    """Run the pipeline up to (but not including) delivery.
+
+    When ``sample_if_empty`` is True and no live stories are found, a couple of
+    sample stories are used so a (test) edition can still be produced.
+    """
     now = now or datetime.now(timezone.utc)
     sources = load_sources(settings.feeds_path)
     logger.info("Loaded %d source feeds.", len(sources))
@@ -40,7 +75,10 @@ def build_edition(settings: Settings, now: datetime | None = None) -> tuple[int,
         now=now,
     )
     if not articles:
-        return 0, None
+        if not sample_if_empty:
+            return 0, None
+        logger.info("No live stories — using sample content for the test edition.")
+        articles = _sample_articles(now)
 
     summary = summarize(articles, settings)
     edition = render_edition(articles, summary, settings.template_dir, now=now)
@@ -51,22 +89,23 @@ def run(
     settings: Settings,
     *,
     dry_run: bool = False,
+    test_mode: bool = False,
     output_path: Path | None = None,
     now: datetime | None = None,
 ) -> RunResult:
     """Build and deliver today's edition.
 
-    When ``dry_run`` is True, the edition is rendered and (optionally) written
-    to ``output_path`` but not emailed.
+    - ``dry_run``: render (and optionally write to ``output_path``) but do not send.
+    - ``test_mode``: always send, even if there are no live stories (sample
+      content is used as a fallback), and prefix the subject with ``[TEST]``.
     """
-    count, edition = build_edition(settings, now=now)
+    count, edition = build_edition(settings, now=now, sample_if_empty=test_mode)
 
     if edition is None:
-        if settings.skip_if_empty:
-            logger.info("No small-satellite stories found — skipping delivery.")
-            return RunResult(0, sent=False, skipped_reason="no_articles", edition=None)
-        # Fall through with an empty edition is not meaningful; treat as skip.
+        logger.info("No small-satellite stories found — skipping delivery.")
         return RunResult(0, sent=False, skipped_reason="no_articles", edition=None)
+
+    subject = f"[TEST] {edition.subject}" if test_mode else edition.subject
 
     if output_path is not None:
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -74,8 +113,8 @@ def run(
         logger.info("Wrote rendered HTML to %s", output_path)
 
     if dry_run:
-        logger.info("Dry run — not sending. Subject: %s", edition.subject)
+        logger.info("Dry run — not sending. Subject: %s", subject)
         return RunResult(count, sent=False, skipped_reason="dry_run", edition=edition)
 
-    send_email(edition.subject, edition.html, edition.text, settings)
+    send_email(subject, edition.html, edition.text, settings)
     return RunResult(count, sent=True, skipped_reason=None, edition=edition)

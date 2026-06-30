@@ -12,6 +12,10 @@ on:
         description: "Render only, do not send"
         type: boolean
         default: false
+      test_email:
+        description: "Send a TEST email now (uses sample stories if none are live)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -68,6 +72,8 @@ jobs:
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             python -m smallsat_news --dry-run --output output/edition.html
+          elif [ "${{ github.event.inputs.test_email }}" = "true" ]; then
+            python -m smallsat_news --test --output output/edition.html
           else
             python -m smallsat_news --output output/edition.html
           fi

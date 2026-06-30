@@ -22,6 +22,12 @@ def main(argv: list[str] | None = None) -> int:
         help="Render the edition but do not send it.",
     )
     parser.add_argument(
+        "--test",
+        action="store_true",
+        help="Send a test edition now, even if there are no live stories "
+        "(uses sample content as a fallback). Subject is prefixed [TEST].",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=None,
@@ -48,7 +54,22 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 2
 
-    result = run(settings, dry_run=args.dry_run, output_path=args.output)
+    from .mailer import DeliveryError
+
+    try:
+        result = run(
+            settings,
+            dry_run=args.dry_run,
+            test_mode=args.test,
+            output_path=args.output,
+        )
+    except DeliveryError as exc:
+        logging.error("Delivery failed: %s", exc)
+        print(
+            "Could not send the email. Check your delivery credentials "
+            "(SMTP_* / RESEND_API_KEY). Details above."
+        )
+        return 1
 
     if result.skipped_reason == "no_articles":
         print("No small-satellite stories today — nothing sent.")
