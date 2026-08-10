@@ -4,11 +4,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Small-Sat News — {{ date_label }}</title>
+<title>Vibe Coding Daily — {{ date_label }}</title>
 </head>
 <body style="margin:0; padding:0; background-color:#0b1020; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#1a1a2e;">
   <div style="display:none; max-height:0; overflow:hidden;">
-    {{ count }} small-satellite {{ 'story' if count == 1 else 'stories' }} from across the space-sector press.
+    {{ count }} vibe-coding {{ 'story' if count == 1 else 'stories' }} from across the developer-tools and AI press.
   </div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#0b1020; padding:24px 12px;">
     <tr>
@@ -17,10 +17,10 @@
 
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,#13294b 0%,#1f6feb 100%); padding:28px 32px;">
-              <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#9fc3ff; font-weight:600;">Daily Small-Satellite Digest</div>
-              <div style="font-size:26px; font-weight:700; color:#ffffff; margin-top:4px;">🛰️ Small-Sat News</div>
-              <div style="font-size:14px; color:#c9deff; margin-top:6px;">{{ date_label }}</div>
+            <td style="background:linear-gradient(135deg,#4c1d95 0%,#7c3aed 100%); padding:28px 32px;">
+              <div style="font-size:13px; letter-spacing:2px; text-transform:uppercase; color:#ddd6fe; font-weight:600;">Daily AI-Assisted-Coding Digest</div>
+              <div style="font-size:26px; font-weight:700; color:#ffffff; margin-top:4px;">🪄 Vibe Coding Daily</div>
+              <div style="font-size:14px; color:#e9d5ff; margin-top:6px;">{{ date_label }}</div>
             </td>
           </tr>
 
@@ -35,7 +35,7 @@
           {% if top_picks %}
           <tr>
             <td style="padding:20px 32px 4px 32px;">
-              <div style="font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#1f6feb; font-weight:700; border-bottom:2px solid #e6eefc; padding-bottom:8px;">⭐ Top Picks</div>
+              <div style="font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#7c3aed; font-weight:700; border-bottom:2px solid #ede9fe; padding-bottom:8px;">⭐ Top Picks</div>
             </td>
           </tr>
           {% for item in top_picks %}
@@ -66,8 +66,8 @@
           <tr>
             <td style="padding:32px; text-align:center; color:#8a91a3; font-size:12px; line-height:1.6;">
               <div style="border-top:1px solid #eceef3; padding-top:20px;">
-                Aggregated from across the space-sector press · filtered for small-satellite development<br>
-                Summaries generated with Claude. Curated automatically — links go to original sources.
+                Aggregated from across the developer-tools and AI press · filtered for vibe coding<br>
+                Summaries generated with an LLM. Curated automatically — links go to original sources.
               </div>
             </td>
           </tr>

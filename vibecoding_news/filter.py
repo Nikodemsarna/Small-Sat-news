@@ -1,4 +1,4 @@
-"""Filter aggregated articles down to recent small-satellite stories."""
+"""Filter aggregated articles down to recent vibe-coding stories."""
 
 from __future__ import annotations
 
@@ -10,48 +10,65 @@ from .fetch import Article
 
 logger = logging.getLogger(__name__)
 
-# Keywords that mark a story as small-satellite related. Matched case-insensitively
-# with word boundaries against the title + summary. Keep this list focused on
-# small-satellite development to honor the "small satellites only" scope.
-SMALLSAT_KEYWORDS: tuple[str, ...] = (
-    "small satellite",
-    "small satellites",
-    "small-satellite",
-    "small-satellites",
-    "small sat",
-    "small sats",
-    "small-sat",
-    "small-sats",
-    "smallsat",
-    "smallsats",
-    "cubesat",
-    "cubesats",
-    "nanosat",
-    "nanosats",
-    "nanosatellite",
-    "nanosatellites",
-    "microsat",
-    "microsats",
-    "microsatellite",
-    "microsatellites",
-    "picosat",
-    "picosatellite",
-    "femtosat",
-    "smallsat launch",
-    "rideshare",
-    "cubesat constellation",
+# Keywords that mark a story as "vibe coding" — AI-assisted software
+# development: the practice, the assistants/agents, and the tools. Matched
+# case-insensitively with word boundaries against the title + summary.
+VIBE_KEYWORDS: tuple[str, ...] = (
+    # The practice / concept
+    "vibe coding",
+    "vibe-coding",
+    "vibecoding",
+    "vibe coder",
+    "vibe coders",
+    "ai coding",
+    "ai-assisted",
+    "ai assisted",
+    "ai pair programming",
+    "pair programmer",
+    "agentic coding",
+    "autonomous coding",
+    "coding agent",
+    "coding agents",
+    "coding assistant",
+    "coding assistants",
+    "code generation",
+    "codegen",
+    "software engineering agent",
+    "swe agent",
+    "swe-agent",
+    "ai developer tools",
+    "llm coding",
+    "prompt engineering",
+    # Assistants / agents / products
+    "github copilot",
+    "copilot",
+    "cursor ai",
+    "claude code",
+    "codeium",
+    "windsurf",
+    "aider",
+    "devin",
+    "replit agent",
+    "bolt.new",
+    "v0.dev",
+    "lovable",
+    "codewhisperer",
+    "amazon q developer",
+    "tabnine",
+    "sourcegraph cody",
+    "openai codex",
+    "codex cli",
+    "gemini code assist",
+    "swe-bench",
 )
 
-# Phrases such as "3U cubesat" / "6U" form factors — handled by the cubesat
-# keyword already, so no special-casing needed here.
-
 _KEYWORD_RE = re.compile(
-    r"(?<!\w)(?:%s)(?!\w)" % "|".join(re.escape(k) for k in SMALLSAT_KEYWORDS),
+    r"(?<!\w)(?:%s)(?!\w)" % "|".join(re.escape(k) for k in VIBE_KEYWORDS),
     re.IGNORECASE,
 )
 
 
-def matches_smallsat(article: Article) -> bool:
+def matches_topic(article: Article) -> bool:
     haystack = f"{article.title}\n{article.summary}"
     return bool(_KEYWORD_RE.search(haystack))
 
@@ -77,7 +94,7 @@ def filter_articles(
     seen: set[str] = set()
     kept: list[Article] = []
     for article in articles:
-        if not matches_smallsat(article):
+        if not matches_topic(article):
             continue
         if not is_recent(article, window, now=now):
             continue
@@ -93,7 +110,7 @@ def filter_articles(
         reverse=True,
     )
     logger.info(
-        "Filtered %d small-satellite stories from %d entries (window=%dh)",
+        "Filtered %d vibe-coding stories from %d entries (window=%dh)",
         len(kept),
         len(articles),
         window_hours,

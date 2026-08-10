@@ -17,7 +17,7 @@ from .sources import Source
 logger = logging.getLogger(__name__)
 
 USER_AGENT = (
-    "Mozilla/5.0 (compatible; SmallSatNewsBot/1.0; "
+    "Mozilla/5.0 (compatible; VibeCodingDailyBot/1.0; "
     "+https://github.com/Nikodemsarna/Small-Sat-news)"
 )
 REQUEST_TIMEOUT = 20  # seconds

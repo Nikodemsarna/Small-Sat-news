@@ -1,46 +1,40 @@
-# Small-Sat News — source portals
+# Vibe Coding Daily — source portals
 #
-# Every available portal covering the space sector / space business and
-# satellites that publishes an RSS/Atom feed. Feeds that fail to load on a
-# given day are logged and skipped, so the newsletter degrades gracefully.
-#
-# Add or remove sources freely — `name` is shown as the story's source label.
+# Feeds from across the developer-tools and AI press that surface "vibe coding"
+# news: AI coding assistants/agents, the practice, launches, and benchmarks.
+# Feeds that fail to load on a given day are logged and skipped, so the
+# newsletter degrades gracefully. `name` is shown as the story's source label.
 
 feeds:
-  # --- Dedicated space-industry / space-business press ---
-  - name: SpaceNews
-    url: https://spacenews.com/feed/
-  - name: Payload
-    url: https://payloadspace.com/feed/
-  - name: Via Satellite
-    url: https://www.satellitetoday.com/feed/
-  - name: SatNews
-    url: https://news.satnews.com/rss/all-news.xml
-  - name: European Spaceflight
-    url: https://europeanspaceflight.com/feed/
-  - name: NASASpaceflight
-    url: https://www.nasaspaceflight.com/feed/
-  - name: Spaceflight Now
-    url: https://spaceflightnow.com/feed/
-  - name: SpaceDaily
-    url: https://www.spacedaily.com/spacedaily.xml
-  - name: The Space Review
-    url: http://www.thespacereview.com/rss.xml
-  - name: SpacePolicyOnline
-    url: https://spacepolicyonline.com/feed/
+  # --- Hacker News (targeted searches + front page) ---
+  # hnrss is very reliable and lets us target the topic precisely.
+  - name: Hacker News — "vibe coding"
+    url: https://hnrss.org/newest?q=%22vibe+coding%22&count=40
+  - name: Hacker News — AI coding tools
+    url: https://hnrss.org/newest?q=Copilot+OR+Cursor+OR+%22Claude+Code%22+OR+Codeium+OR+Aider+OR+Devin&count=40
+  - name: Hacker News — front page
+    url: https://hnrss.org/frontpage
 
-  # --- General science/tech outlets with strong space desks ---
-  - name: Space.com
-    url: https://www.space.com/feeds/all
-  - name: Ars Technica — Space
-    url: https://feeds.arstechnica.com/arstechnica/space
-  - name: Teslarati — Space
-    url: https://www.teslarati.com/category/news/space/feed/
+  # --- AI-coding-focused blogs / newsletters ---
+  - name: Simon Willison
+    url: https://simonwillison.net/atom/everything/
+  - name: Latent Space
+    url: https://www.latent.space/feed
+  - name: GitHub Blog
+    url: https://github.blog/feed/
 
-  # --- Agencies / institutional ---
-  - name: NASA
-    url: https://www.nasa.gov/feed/
-  - name: ESA — Space News
-    url: https://www.esa.int/rssfeed/Our_Activities/Space_Transportation
-  - name: ESA — Applications
-    url: https://www.esa.int/rssfeed/Our_Activities/Observing_the_Earth
+  # --- General AI / dev-tools press ---
+  - name: TechCrunch — AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+  - name: The Verge — AI
+    url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+  - name: VentureBeat — AI
+    url: https://venturebeat.com/category/ai/feed/
+  - name: Ars Technica
+    url: https://arstechnica.com/feed/
+  - name: InfoQ
+    url: https://feed.infoq.com/
+  - name: The Register — Software
+    url: https://www.theregister.com/software/headlines.atom
+  - name: dev.to — AI
+    url: https://dev.to/feed/tag/ai

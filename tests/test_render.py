@@ -1,9 +1,9 @@
 from datetime import datetime, timezone
 
-from smallsat_news.config import Settings
-from smallsat_news.fetch import Article
-from smallsat_news.render import render_edition
-from smallsat_news.summarize import EditionSummary
+from vibecoding_news.config import Settings
+from vibecoding_news.fetch import Article
+from vibecoding_news.render import render_edition
+from vibecoding_news.summarize import EditionSummary
 
 NOW = datetime(2026, 6, 30, 12, 0, tzinfo=timezone.utc)
 
@@ -11,23 +11,23 @@ NOW = datetime(2026, 6, 30, 12, 0, tzinfo=timezone.utc)
 def test_render_edition_smoke():
     articles = [
         Article(
-            title="New cubesat constellation announced",
+            title="Cursor ships agent mode for autonomous edits",
             link="https://example.com/1",
-            source="SpaceNews",
-            summary="A company unveiled a 12-satellite cubesat constellation.",
+            source="Hacker News",
+            summary="The AI editor added a mode that plans and applies multi-file changes.",
             published=NOW,
         ),
         Article(
-            title="Nanosat propulsion milestone",
+            title="Aider adds repo-map improvements",
             link="https://example.com/2",
-            source="Payload",
-            summary="A startup demonstrated electric propulsion on a 6U nanosat.",
+            source="Simon Willison",
+            summary="The open-source AI pair programmer improved how it maps large repos.",
             published=NOW,
         ),
     ]
     summary = EditionSummary(
-        intro="Two notable small-satellite developments today.",
-        summaries=["Cubesat constellation unveiled.", "Nanosat propulsion demonstrated."],
+        intro="Two notable vibe-coding developments today.",
+        summaries=["Cursor added an autonomous agent mode.", "Aider improved repo mapping."],
         relevances=["high", "medium"],
         top_pick_indices=[0],
     )
@@ -36,30 +36,31 @@ def test_render_edition_smoke():
 
     assert edition.count == 2
     assert "2026-06-30" in edition.subject
+    assert "Vibe Coding Daily" in edition.subject
     assert len(edition.top_picks) == 1
     assert len(edition.more) == 1
     # HTML contains the titles and links.
-    assert "New cubesat constellation announced" in edition.html
+    assert "Cursor ships agent mode for autonomous edits" in edition.html
     assert "https://example.com/2" in edition.html
     assert "Top Picks" in edition.html
     # Plain-text alternative is populated.
     assert "TOP PICKS" in edition.text
-    assert "Nanosat propulsion milestone" in edition.text
+    assert "Aider adds repo-map improvements" in edition.text
 
 
 def test_render_handles_no_top_picks():
     articles = [
         Article(
-            title="Smallsat rideshare manifest grows",
+            title="GitHub Copilot usage grows among enterprises",
             link="https://example.com/3",
-            source="SatNews",
-            summary="More payloads added to an upcoming smallsat rideshare.",
+            source="The Verge",
+            summary="Adoption of the AI coding assistant expanded across large teams.",
             published=NOW,
         )
     ]
     summary = EditionSummary(
         intro="",
-        summaries=["Rideshare manifest expanded."],
+        summaries=["Copilot enterprise adoption grew."],
         relevances=["medium"],
         top_pick_indices=[],
     )
@@ -68,4 +69,4 @@ def test_render_handles_no_top_picks():
     assert edition.count == 1
     assert len(edition.top_picks) == 0
     assert len(edition.more) == 1
-    assert "Smallsat rideshare manifest grows" in edition.html
+    assert "GitHub Copilot usage grows among enterprises" in edition.html

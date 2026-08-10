@@ -30,20 +30,20 @@ def _sample_articles(now: datetime) -> list[Article]:
     """Placeholder stories so a test edition always has content to send."""
     return [
         Article(
-            title="Test edition — your Small-Sat News delivery is working",
+            title="Test edition — your Vibe Coding Daily delivery is working",
             link="https://github.com/Nikodemsarna/Small-Sat-news",
-            source="Small-Sat News (sample)",
+            source="Vibe Coding Daily (sample)",
             summary=(
                 "This is a sample story. If you're reading it in your inbox, "
                 "email delivery is configured correctly. Real editions replace "
-                "this with live small-satellite news."
+                "this with live vibe-coding news."
             ),
             published=now,
         ),
         Article(
-            title="Sample: 6U cubesat demonstrates electric propulsion in orbit",
+            title="Sample: new AI coding agent lands more autonomous PRs",
             link="https://github.com/Nikodemsarna/Small-Sat-news",
-            source="Small-Sat News (sample)",
+            source="Vibe Coding Daily (sample)",
             summary=(
                 "A second sample item so you can preview the layout, top-picks "
                 "section, and formatting of a normal edition."
@@ -102,7 +102,7 @@ def run(
     count, edition = build_edition(settings, now=now, sample_if_empty=test_mode)
 
     if edition is None:
-        logger.info("No small-satellite stories found — skipping delivery.")
+        logger.info("No vibe-coding stories found — skipping delivery.")
         return RunResult(0, sent=False, skipped_reason="no_articles", edition=None)
 
     subject = f"[TEST] {edition.subject}" if test_mode else edition.subject

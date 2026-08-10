@@ -1,4 +1,4 @@
-"""Command-line entry point: `python -m smallsat_news`."""
+"""Command-line entry point: `python -m vibecoding_news`."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from .newsletter import run
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="smallsat_news",
-        description="Build and email the daily small-satellite newsletter.",
+        prog="vibecoding_news",
+        description="Build and email the daily vibe-coding newsletter.",
     )
     parser.add_argument(
         "--dry-run",
@@ -72,7 +72,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     if result.skipped_reason == "no_articles":
-        print("No small-satellite stories today — nothing sent.")
+        print("No vibe-coding stories today — nothing sent.")
         return 0
     if result.sent:
         print(f"Sent edition with {result.article_count} stories to {settings.recipient}.")

@@ -1,6 +1,6 @@
-name: Daily Small-Sat Newsletter
+name: Daily Vibe Coding Newsletter
 
-# Runs every morning and emails the small-satellite digest.
+# Runs every morning and emails the vibe-coding digest.
 # Also runnable on demand (workflow_dispatch), with an optional dry run.
 on:
   schedule:
@@ -55,7 +55,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          SMALLSAT_PROVIDER: ${{ vars.SMALLSAT_PROVIDER }}
+          VIBE_PROVIDER: ${{ vars.VIBE_PROVIDER }}
           # Delivery — set EITHER the Resend secret OR the SMTP_* secrets.
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
@@ -65,17 +65,17 @@ jobs:
           # Optional overrides (otherwise defaults from the code apply).
           NEWSLETTER_TO: ${{ secrets.NEWSLETTER_TO }}
           NEWSLETTER_FROM: ${{ secrets.NEWSLETTER_FROM }}
-          SMALLSAT_MODEL: ${{ vars.SMALLSAT_MODEL }}
-          SMALLSAT_EFFORT: ${{ vars.SMALLSAT_EFFORT }}
-          SMALLSAT_WINDOW_HOURS: ${{ vars.SMALLSAT_WINDOW_HOURS }}
-          SMALLSAT_MAX_ARTICLES: ${{ vars.SMALLSAT_MAX_ARTICLES }}
+          VIBE_MODEL: ${{ vars.VIBE_MODEL }}
+          VIBE_EFFORT: ${{ vars.VIBE_EFFORT }}
+          VIBE_WINDOW_HOURS: ${{ vars.VIBE_WINDOW_HOURS }}
+          VIBE_MAX_ARTICLES: ${{ vars.VIBE_MAX_ARTICLES }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            python -m smallsat_news --dry-run --output output/edition.html
+            python -m vibecoding_news --dry-run --output output/edition.html
           elif [ "${{ github.event.inputs.test_email }}" = "true" ]; then
-            python -m smallsat_news --test --output output/edition.html
+            python -m vibecoding_news --test --output output/edition.html
           else
-            python -m smallsat_news --output output/edition.html
+            python -m vibecoding_news --output output/edition.html
           fi
 
       - name: Upload rendered edition

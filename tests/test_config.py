@@ -1,6 +1,6 @@
 import pytest
 
-from smallsat_news.config import Settings
+from vibecoding_news.config import Settings
 
 
 @pytest.fixture(autouse=True)
@@ -10,8 +10,8 @@ def _clear_provider_env(monkeypatch):
         "GOOGLE_API_KEY",
         "GROQ_API_KEY",
         "ANTHROPIC_API_KEY",
-        "SMALLSAT_PROVIDER",
-        "SMALLSAT_MODEL",
+        "VIBE_PROVIDER",
+        "VIBE_MODEL",
     ):
         monkeypatch.delenv(key, raising=False)
 
@@ -42,7 +42,7 @@ def test_free_provider_preferred_over_anthropic(monkeypatch):
 def test_explicit_provider_override(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "x")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "a")
-    monkeypatch.setenv("SMALLSAT_PROVIDER", "anthropic")
+    monkeypatch.setenv("VIBE_PROVIDER", "anthropic")
     s = Settings.from_env()
     assert s.provider == "anthropic"
     assert s.resolved_model == "claude-opus-4-8"
@@ -51,7 +51,7 @@ def test_explicit_provider_override(monkeypatch):
 
 def test_model_override(monkeypatch):
     monkeypatch.setenv("GEMINI_API_KEY", "x")
-    monkeypatch.setenv("SMALLSAT_MODEL", "gemini-1.5-flash")
+    monkeypatch.setenv("VIBE_MODEL", "gemini-1.5-flash")
     s = Settings.from_env()
     assert s.resolved_model == "gemini-1.5-flash"
 

@@ -49,7 +49,7 @@ class Settings:
 
     # Delivery
     recipient: str = "nikodem.sarna@gmail.com"
-    sender: str = "Small-Sat News <onboarding@resend.dev>"
+    sender: str = "Vibe Coding Daily <onboarding@resend.dev>"
     resend_api_key: str = ""
     smtp_host: str = ""
     smtp_port: int = 587
@@ -74,7 +74,7 @@ class Settings:
         groq_key = os.environ.get("GROQ_API_KEY", "").strip()
         anthropic_key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 
-        provider = os.environ.get("SMALLSAT_PROVIDER", "").strip().lower()
+        provider = os.environ.get("VIBE_PROVIDER", "").strip().lower()
         if provider not in {"gemini", "groq", "anthropic"}:
             # Auto-detect from whichever key is present (free providers first).
             if gemini_key:
@@ -89,15 +89,15 @@ class Settings:
         sender = os.environ.get("NEWSLETTER_FROM", "").strip()
         smtp_user = os.environ.get("SMTP_USER", "").strip()
         if not sender:
-            sender = smtp_user or "Small-Sat News <onboarding@resend.dev>"
+            sender = smtp_user or "Vibe Coding Daily <onboarding@resend.dev>"
 
         return cls(
             provider=provider,
             gemini_api_key=gemini_key,
             groq_api_key=groq_key,
             anthropic_api_key=anthropic_key,
-            model=os.environ.get("SMALLSAT_MODEL", "").strip(),
-            effort=os.environ.get("SMALLSAT_EFFORT", "").strip() or "medium",
+            model=os.environ.get("VIBE_MODEL", "").strip(),
+            effort=os.environ.get("VIBE_EFFORT", "").strip() or "medium",
             recipient=os.environ.get("NEWSLETTER_TO", "").strip()
             or "nikodem.sarna@gmail.com",
             sender=sender,
@@ -106,9 +106,9 @@ class Settings:
             smtp_port=_env_int("SMTP_PORT", 587),
             smtp_user=smtp_user,
             smtp_password=os.environ.get("SMTP_PASSWORD", "").strip(),
-            window_hours=_env_int("SMALLSAT_WINDOW_HOURS", 48),
-            max_articles=_env_int("SMALLSAT_MAX_ARTICLES", 25),
-            skip_if_empty=_env_bool("SMALLSAT_SKIP_IF_EMPTY", True),
+            window_hours=_env_int("VIBE_WINDOW_HOURS", 48),
+            max_articles=_env_int("VIBE_MAX_ARTICLES", 25),
+            skip_if_empty=_env_bool("VIBE_SKIP_IF_EMPTY", True),
         )
 
     @property

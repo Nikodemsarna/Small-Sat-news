@@ -1,7 +1,7 @@
 """Summarize filtered articles with a pluggable LLM provider.
 
 Supported providers (auto-detected from whichever API key is set, or forced
-via ``SMALLSAT_PROVIDER``):
+via ``VIBE_PROVIDER``):
 
   * ``gemini``    — Google Gemini (free tier via Google AI Studio)   [default]
   * ``groq``      — Groq (free tier, Llama models)
@@ -30,19 +30,21 @@ _TIMEOUT = 90
 _MAX_TOKENS = 8000
 
 _SYSTEM_PROMPT = (
-    "You are the editor of a focused daily newsletter on SMALL-SATELLITE "
-    "development — cubesats, nanosats, microsats, smallsat constellations, "
-    "rideshare launches, and the companies and agencies building them. "
-    "You write for an informed space-industry audience: concise, factual, no "
-    "hype, no marketing language. Summaries must be grounded only in the "
-    "provided title and description — never invent specifics, numbers, or "
-    "outcomes that are not present in the source text."
+    "You are the editor of a focused daily newsletter on VIBE CODING — "
+    "AI-assisted software development. That covers AI coding assistants and "
+    "agents (GitHub Copilot, Cursor, Claude Code, Codeium/Windsurf, Aider, "
+    "Devin, Replit Agent, Codex and others), the practice and workflows of "
+    "prompting/agentic coding, notable launches, benchmarks, and the "
+    "companies building these tools. You write for an informed software-"
+    "developer audience: concise, factual, no hype, no marketing language. "
+    "Summaries must be grounded only in the provided title and description — "
+    "never invent specifics, numbers, or outcomes not present in the source."
 )
 
 _JSON_SHAPE = (
     "Respond with ONE JSON object, no markdown, of exactly this shape:\n"
     "{\n"
-    '  "intro": "2-3 sentence overview of the day\'s small-satellite news",\n'
+    '  "intro": "2-3 sentence overview of the day\'s vibe-coding news",\n'
     '  "articles": [{"index": <int>, "summary": "1-2 sentences", '
     '"relevance": "high|medium|low"}],\n'
     '  "top_picks": [<up to 5 article indices, most important first>]\n'
@@ -85,9 +87,9 @@ class EditionSummary:
 
 def _build_user_prompt(articles: list[Article]) -> str:
     lines = [
-        "Here are today's small-satellite news items. For EACH item, write a "
+        "Here are today's vibe-coding news items. For EACH item, write a "
         "1-2 sentence plain-English summary and rate its relevance to "
-        "small-satellite development.",
+        "AI-assisted software development (vibe coding).",
         "",
         _JSON_SHAPE,
         "",
@@ -149,9 +151,9 @@ def _fallback_summary(articles: list[Article]) -> EditionSummary:
         for a in articles
     ]
     intro = (
-        f"{len(articles)} small-satellite "
+        f"{len(articles)} vibe-coding "
         f"{'story' if len(articles) == 1 else 'stories'} from across the "
-        "space-sector press today."
+        "developer-tools and AI press today."
     )
     return EditionSummary(
         intro=intro,

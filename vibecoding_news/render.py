@@ -69,7 +69,7 @@ def render_edition(
     today: date = now.date()
     date_label = today.strftime("%A, %B %d, %Y")
     count = len(articles)
-    subject = f"Small-Sat News — {today.isoformat()}: {count} " + (
+    subject = f"Vibe Coding Daily — {today.isoformat()}: {count} " + (
         "story" if count == 1 else "stories"
     )
 
@@ -112,7 +112,7 @@ def _render_text(
     top_picks: list[RenderedItem],
     more: list[RenderedItem],
 ) -> str:
-    lines = ["SMALL-SAT NEWS", date_label, "=" * 40, ""]
+    lines = ["VIBE CODING DAILY", date_label, "=" * 40, ""]
     if intro:
         lines += [intro, ""]
 
@@ -132,5 +132,5 @@ def _render_text(
     block("TOP PICKS", top_picks)
     block("MORE HEADLINES", more)
     lines.append("—")
-    lines.append("Small-Sat News · daily small-satellite digest")
+    lines.append("Vibe Coding Daily · AI-assisted-development digest")
     return "\n".join(lines)
