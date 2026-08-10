@@ -79,6 +79,14 @@ def _send_via_smtp(subject: str, html: str, text: str, settings: Settings) -> No
             server.ehlo()
             server.login(settings.smtp_user, settings.smtp_password)
             server.sendmail(settings.sender, [settings.recipient], message.as_string())
+    except smtplib.SMTPAuthenticationError as exc:
+        raise DeliveryError(
+            "SMTP authentication failed — the mail server rejected the "
+            "username/password. For Gmail (535 BadCredentials): SMTP_PASSWORD "
+            "must be a 16-character App Password (not your normal password), "
+            "2-Step Verification must be enabled, and SMTP_USER must be the "
+            f"same Gmail address. Original error: {exc}"
+        ) from exc
     except (smtplib.SMTPException, OSError) as exc:
         raise DeliveryError(f"SMTP delivery failed: {exc}") from exc
     logger.info("Sent newsletter to %s via SMTP (%s).", settings.recipient, settings.smtp_host)

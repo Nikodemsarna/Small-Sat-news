@@ -105,7 +105,10 @@ class Settings:
             smtp_host=os.environ.get("SMTP_HOST", "").strip(),
             smtp_port=_env_int("SMTP_PORT", 587),
             smtp_user=smtp_user,
-            smtp_password=os.environ.get("SMTP_PASSWORD", "").strip(),
+            # Gmail App Passwords are shown with spaces (e.g. "abcd efgh ijkl
+            # mnop") but must be sent without them — strip all whitespace so a
+            # copy-paste-with-spaces still authenticates.
+            smtp_password="".join(os.environ.get("SMTP_PASSWORD", "").split()),
             window_hours=_env_int("VIBE_WINDOW_HOURS", 48),
             max_articles=_env_int("VIBE_MAX_ARTICLES", 25),
             skip_if_empty=_env_bool("VIBE_SKIP_IF_EMPTY", True),
